@@ -1,0 +1,51 @@
+* {
+    background-color: blanchedalmond;
+    margin: 0px;
+}
+
+/* body {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+} */
+
+#container {
+    display: grid;
+    grid-template-rows: 0.1fr 1fr 0.1fr;
+    place-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100vh;
+}
+
+#inputPetition {
+    display: grid;
+    /* width: 100%; */
+    grid-template-columns: 1fr 1fr;
+    gap: 3em;
+    place-items: center;
+    margin: 25px;
+}
+
+#sigCanvas {
+    border: 2px dotted #cccccc;
+    border-radius: 15px;
+    cursor: crosshair;
+    align-self: center;
+    background-color: white;
+}
+
+#submit {
+    position: relative;
+    margin: 25px;
+}
+
+.nameInputF {
+    justify-self: end;
+    width: 200px;
+}
+
+.nameInputL {
+    justify-self: start;
+    width: 200px;
+}
