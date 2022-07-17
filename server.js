@@ -25,8 +25,8 @@ app.get("/petition", (req, res) => {
     res.render("petition");
 });
 
-app.post("/petition", (req, res) => {
-    db.addSigner(req.body.firstName, req.body.lastName, req.body.signature)
+app.post("/signed", (req, res) => {
+    db.addSigner(req.body.first_name, req.body.last_name, req.body.signature)
         .then(() => {
             console.log("posted signature");
             res.cookie("signed", 1);

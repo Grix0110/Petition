@@ -3,12 +3,6 @@
     margin: 0px;
 }
 
-/* body {
-    display: grid;
-    place-items: center;
-    height: 100vh;
-} */
-
 #container {
     display: grid;
     grid-template-rows: 0.1fr 1fr 0.1fr;

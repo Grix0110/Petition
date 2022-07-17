@@ -13,11 +13,11 @@ module.exports.getSigners = () => {
     return db.query(`SELECT * FROM signatures`);
 };
 
-module.exports.addSigner = (firstName, lastName, signature) => {
+module.exports.addSigner = (first_name, last_name, signature) => {
     return db.query(
         `
-    INSERT INTO actors(first_name, last_name, signaturtes)
+    INSERT INTO signatures(first_name, last_name, signatures)
     VALUES ($1,$2,$3)`,
-        [firstName, lastName, signature]
+        [first_name, last_name, signature]
     );
 };

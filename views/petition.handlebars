@@ -5,20 +5,19 @@
 </h1>
 <br />
 <br />
-<form id="inputPetition" method="post">
+<form id="inputPetition" action="/signed" method="post">
     <input
         type="text"
-        name="firstName"
+        name="first_name"
         placeholder="First Name"
         class="nameInputF"
     />
     <input
         type="text"
-        name="lastName"
+        name="last_name"
         placeholder="Last Name"
         class="nameInputL"
     />
-</form>
 <canvas
     width="600"
     height="150"
@@ -27,4 +26,5 @@
     placeholder="sign here..."
 ></canvas>
 <br />
-<button id="submit">Submit Signature</button>
+<input type="submit" value="Send Data" id="submit">Submit Signature</input>
+</form>
