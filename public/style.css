@@ -1,9 +1,9 @@
 * {
-    background-color: blanchedalmond;
     margin: 0px;
 }
 
 #container {
+    background: radial-gradient(circle at right bottom, #9896f0, #fbc8d5);
     display: grid;
     grid-template-rows: 0.1fr 1fr 0.1fr;
     place-items: center;
@@ -14,32 +14,83 @@
 
 #inputPetition {
     display: grid;
-    /* width: 100%; */
-    grid-template-columns: 1fr 1fr;
-    gap: 3em;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     place-items: center;
     margin: 25px;
 }
 
 #sigCanvas {
-    border: 2px dotted #cccccc;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    /* border: 2px dotted #cccccc; */
     border-radius: 15px;
     cursor: crosshair;
     align-self: center;
-    background-color: white;
+    background: rgba(255, 255, 255, 0.3);
+    /* box-shadow: 1px 1px 5px black; */
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+        0px -1px 0px rgba(0, 0, 0, 0.7);
+}
+
+.nameInput {
+    -moz-padding-start: calc(10px - 3px);
+    cursor: text;
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.3);
+    color: grey;
+    width: 180px;
+    margin: 20px;
+    border: none;
+    border-radius: 7.25px;
+    text-align: center;
+    /* box-shadow: 1px 1px 5px black; */
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+        0px -1px 0px rgba(0, 0, 0, 0.7);
+}
+
+.nameInput:focus {
+    outline-offset: 0px !important;
+    outline: none !important;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+        0px -1px 0px rgba(0, 0, 0, 0.7);
+}
+
+#nameInputF {
+    grid-column-start: 2;
+}
+
+#nameInputL {
+    grid-column-start: 3;
+}
+
+#sig-text{
+    position: absolute;
+    bottom: 50px;
 }
 
 #submit {
-    position: relative;
+    grid-column-start: 2;
+    grid-column-end: 4;
+    -moz-padding-start: calc(10px - 3px);
+    cursor: pointer;
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.3);
+    color: grey;
+    width: 180px;
     margin: 25px;
+    border: none;
+    border-radius: 7.25px;
+    text-align: center;
+    box-shadow: 1px 1px 5px black;
+    position: relative;
+    margin: 20px;
 }
 
-.nameInputF {
-    justify-self: end;
-    width: 200px;
+#submit:active {
+    outline-offset: 0px !important;
+    outline: none !important;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3),
+        0px -1px 0px rgba(0, 0, 0, 0.7);
 }
 
-.nameInputL {
-    justify-self: start;
-    width: 200px;
-}

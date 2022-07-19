@@ -1,5 +1,5 @@
 (function () {
-    window.requestAnimFrame = (function (callback) {
+    window.requestAnimFrame = (function () {
         return (
             window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
@@ -12,17 +12,17 @@
         );
     })();
 
-    var canvas = document.getElementById("sigCanvas");
-    var ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("sigCanvas");
+    const ctx = canvas.getContext("2d");
     ctx.strokeStyle = "#222222";
     ctx.lineWidth = 2;
 
-    var drawing = false;
-    var mousePos = {
+    let drawing = false;
+    let mousePos = {
         x: 0,
         y: 0,
     };
-    var lastPos = mousePos;
+    let lastPos = mousePos;
 
     canvas.addEventListener(
         "mousedown",
@@ -33,9 +33,16 @@
         false
     );
 
+    // const submitBtn = document.getElementById("submit");
+    const sigText = $("#sig-text");
+
     canvas.addEventListener(
         "mouseup",
-        function (e) {
+        function () {
+            let dataUrl = canvas.toDataURL();
+            console.log(dataUrl);
+            sigText.val(dataUrl);
+
             drawing = false;
         },
         false
@@ -56,8 +63,8 @@
         "touchmove",
         { passive: true },
         function (e) {
-            var touch = e.touches[0];
-            var me = new MouseEvent("mousemove", {
+            let touch = e.touches[0];
+            let me = new MouseEvent("mousemove", {
                 clientX: touch.clientX,
                 clientY: touch.clientY,
             });
@@ -148,17 +155,16 @@
         renderCanvas();
     })();
 
-    var submitBtn = document.getElementById("submit");
-
-    submitBtn.addEventListener(
-        "click",
-        function (e) {
-            // var dataUrl = canvas.toDataURL();
-            // sigText.innerHTML = dataUrl;
-            console.log("clicked");
-            // sigImage.setAttribute("src", dataUrl);
-        },
-        false
-    );
+    // submitBtn.addEventListener(
+    //     "submit",
+    //     function () {
+    //         // var dataUrl = canvas.toDataURL();
+    //         // sigText.innerHTML = dataUrl;
+    //         // console.log(dataUrl);
+    //         console.log("clicked");
+    //         // sigImage.setAttribute("src", dataUrl);
+    //     },
+    //     false
+    // );
 
 })();

@@ -1,3 +1,4 @@
+<img src="" alt="petition image">
 <h1 class="headerText">
     <p>Sign our Petition for Lorem ipsum dolor sit amet consectetur adipisicing
         elit. Natus eos sed optio voluptatum aspernatur molestias consectetur
@@ -8,23 +9,25 @@
 <form id="inputPetition" action="/signed" method="post">
     <input
         type="text"
-        name="first_name"
+        name="first"
         placeholder="First Name"
-        class="nameInputF"
-    />
-    <input
+        class="nameInput"
+        id="nameInputF"
+    /><input
         type="text"
-        name="last_name"
+        name="last"
         placeholder="Last Name"
-        class="nameInputL"
+        class="nameInput"
+        id="nameInputL"
     />
 <canvas
     width="600"
     height="150"
     id="sigCanvas"
-    name="signature"
+    name="signatureCanvas"
     placeholder="sign here..."
 ></canvas>
+<input type="hidden" name="signature" id="sig-text">
 <br />
-<input type="submit" value="Send Data" id="submit">Submit Signature</input>
+<input type="submit" value="Submit Signature" id="submit"></input>
 </form>
