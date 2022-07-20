@@ -154,17 +154,4 @@
         requestAnimationFrame(drawLoop);
         renderCanvas();
     })();
-
-    // submitBtn.addEventListener(
-    //     "submit",
-    //     function () {
-    //         // var dataUrl = canvas.toDataURL();
-    //         // sigText.innerHTML = dataUrl;
-    //         // console.log(dataUrl);
-    //         console.log("clicked");
-    //         // sigImage.setAttribute("src", dataUrl);
-    //     },
-    //     false
-    // );
-
 })();
