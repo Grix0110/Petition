@@ -3,19 +3,41 @@ const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/signatures");
 
 module.exports.getId = (id) => {
-    return db.query(`SELECT * FROM signatures WHERE id = $1`, [id]);
+    return db.query(`SELECT * FROM signatures WHERE user_id = $1`, [id]);
+};
+
+module.exports.getUser = (id) => {
+    return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
+};
+
+// module.exports.getSigners = () => {
+//     return db.query(`SELECT * FROM signatures`);
+// };
+
+module.exports.addSigner = (user_id, signature) => {
+    return db.query(
+        `
+    INSERT INTO signatures(user_id, signature)
+    VALUES ($1, $2) RETURNING id`,
+        [user_id, signature]
+    );
 };
 
 module.exports.getSigners = () => {
-    return db.query(`SELECT * FROM signatures`);
+    return db.query(
+        `SELECT users.first_name, users.last_name, profiles.age, profiles.city, profiles.homepage FROM users
+        LEFT OUTER JOIN profiles
+        ON users.id = profiles.user_id`
+    );
 };
 
-module.exports.addSigner = (signature) => {
+module.exports.getSignerByCity = (city) => {
     return db.query(
-        `
-    INSERT INTO signatures(signature)
-    VALUES ($1) RETURNING id`,
-        [signature]
+        `SELECT users.first_name, users.last_name, profiles.age, profiles.city, profiles.homepage FROM users
+        LEFT OUTER JOIN profiles
+        ON users.id = profiles.user_id
+        WHERE $1 = profiles.city`,
+        [city]
     );
 };
 
@@ -42,8 +64,13 @@ module.exports.findUser = (email) => {
     return db.query(`SELECT * FROM users WHERE email = $1`, [email]);
 };
 
-module.exports.authenticate = (email, password) => {
-    return db
-        .query(`SELECT * FROM users WHERE email = $1`, [email])
-        .then(password);
+module.exports.addProfile = (id, age, city, url) => {
+    return db.query(
+        `INSERT INTO profiles(user_id, age, city, homepage) VALUES ($1, $2, $3, $4)`,
+        [id, age || null, city, url]
+    );
+};
+
+module.exports.deleteSignature = (id) => {
+    return db.query(`DELETE FROM signatures WHERE user_id = $1`, [id]);
 };

@@ -1,1 +1,19 @@
 <h1>A list of all petitioners</h1>
+
+
+<ol id="signers">
+    {{#signers}}
+        <li>{{#if homepage}}
+                <a href="{{homepage}}">{{first_name}}
+                    {{last_name}}
+                </a>
+                {{age}}
+                <a href="/signers/{{city}}">{{city}}</a>
+            {{else}}
+                {{first_name}}
+                {{last_name}}
+                {{age}}
+                <a href="/signers/:city">{{city}}</a>{{/if}}
+        </li>
+    {{/signers}}
+</ol>
