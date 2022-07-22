@@ -1,5 +1,7 @@
-<h1>A list of all petitioners</h1>
-
+<h1>A list of all petitioners
+    {{#if city}}
+        from
+        {{city}}{{/if}}</h1>
 
 <ol id="signers">
     {{#signers}}
@@ -16,4 +18,7 @@
                 <a href="/signers/:city">{{city}}</a>{{/if}}
         </li>
     {{/signers}}
+    <form method="post">
+        <input type="submit" value="Edit here" id="submit" />
+    </form>
 </ol>

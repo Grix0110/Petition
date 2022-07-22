@@ -23,10 +23,13 @@ app.use(
 //functionality of the login/register site
 app.get("/", (req, res) => {
     console.log("get request MAIN");
-    res.redirect("login");
+    res.redirect("register");
 });
 
 app.get("/login", (req, res) => {
+    if (req.session.logId) {
+        return res.redirect("user");
+    }
     console.log("get request LOGIN");
     res.render("login");
 });
@@ -48,6 +51,9 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
+    if (req.session.logId) {
+        return res.redirect("user");
+    }
     console.log("get request REGISTER");
     res.render("register");
 });
@@ -55,7 +61,9 @@ app.get("/register", (req, res) => {
 //post the given information from the register input fields
 app.post("/register", (req, res) => {
     let data = req.body;
-    db.insertUser(data.first, data.last, data.email, data.pword)
+    let firstUpper = data.first[0].toUpperCase() + data.first.substr(1);
+    let lastUpper = data.last[0].toUpperCase() + data.last.substr(1);
+    db.insertUser(firstUpper, lastUpper, data.email, data.pword)
         .then((results) => {
             req.session.logId = results.rows[0].id;
             res.redirect("user");
@@ -68,7 +76,7 @@ app.post("/register", (req, res) => {
 //userprofile information routes
 app.get("/user", (req, res) => {
     if (!req.session.logId) {
-        res.redirect("/register");
+        return res.redirect("/register");
     }
     res.render("user");
 });
@@ -76,7 +84,9 @@ app.get("/user", (req, res) => {
 app.post("/user", (req, res) => {
     let data = req.body;
     let cook = req.session.logId;
-    db.addProfile(cook, data.age, data.City, data.Url)
+    let cityUpper = data.City[0].toUpperCase() + data.City.substr(1);
+
+    db.addProfile(cook, data.age, cityUpper, data.Url)
         .then(() => {
             res.redirect("petition");
         })
@@ -88,8 +98,11 @@ app.post("/user", (req, res) => {
 //functionality of the petition site
 //check for cookie with ID
 app.get("/petition", (req, res) => {
+    if (!req.session.logId) {
+        return res.redirect("/register");
+    }
     if (req.session.signatureId) {
-        res.redirect("/signed");
+        return res.redirect("/signed");
     }
     res.render("petition");
 });
@@ -110,9 +123,9 @@ app.post("/petition", (req, res) => {
 
 //functionality when petition was signed...Implement information on signed route
 app.get("/signed", (req, res) => {
-    // if (!req.session.logId) {
-    //     return res.redirect("petition");
-    // }
+    if (!req.session.logId) {
+        return res.redirect("/register");
+    }
     db.getId(req.session.logId)
         .then((results) => {
             const signer = results.rows[0];
@@ -133,17 +146,13 @@ app.post("/signed", (req, res) => {
         });
 });
 
-app.get("/edit", (req, res) => {
-    res.render("edit");
-});
-
-app.post("edit", (req, res) => {});
-
 app.get("/signers", (req, res) => {
+    if (!req.session.logId) {
+        return res.redirect("/register");
+    }
     console.log("get request SIGNERS");
     db.getSigners()
         .then((results) => {
-            // console.log(results.rows);
             const signers = results.rows;
             res.render("signers", { signers });
         })
@@ -153,29 +162,56 @@ app.get("/signers", (req, res) => {
 });
 
 app.get("/signers/:city", (req, res) => {
+    if (!req.session.logId) {
+        return res.redirect("/register");
+    }
     const city = req.params.city;
     db.getSignerByCity(city)
         .then((results) => {
-            console.log("city results: ", results);
-            const signedCity = results.rows;
-            res.render("/signers/:city", { signedCity });
+            const signers = results.rows;
+            res.render("signers", { signers, city });
         })
         .catch((err) => {
             console.log("ERROR in getSignersByCity", err);
         });
 });
 
-app.get("/signers", (req, res) => {
-    db.getSigners()
-        .then((results) => {
-            console.log("results from getSigners", results);
-            res.render("signers");
-        })
-        .catch((err) => {
-            console.log("err in getSigners ", err);
-        });
+app.post("/signers", (req, res) => {
+    return res.redirect("edit");
 });
 
+app.get("/edit", (req, res) => {
+    if (!req.session.logId) {
+        return res.redirect("/register");
+    }
+    const id = req.session.logId;
+    console.log(id);
+    db.getSignerToEdit(id)
+        .then((results) => {
+            const data = results.rows[0];
+            // console.log(results);
+            return res.render("edit", {
+                first: data.first_name,
+                last: data.last_name,
+                email: data.email,
+                age: data.age,
+                city: data.city,
+                home: data.homepage,
+            });
+        })
+        .catch((err) => console.log("ERROR in EDIT", err));
+});
+
+app.post("edit", (req, res) => {
+    let data = req.body;
+    db.updateProfile(
+        data.first,
+        data.last,
+        data.email,
+        data.pword,
+        req.session.id
+    ).then(res.redirect("signers"));
+});
 app.listen(PORT, () => {
     console.log("petition server is listening!");
 });

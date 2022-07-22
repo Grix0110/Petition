@@ -10,10 +10,6 @@ module.exports.getUser = (id) => {
     return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
 };
 
-// module.exports.getSigners = () => {
-//     return db.query(`SELECT * FROM signatures`);
-// };
-
 module.exports.addSigner = (user_id, signature) => {
     return db.query(
         `
@@ -21,6 +17,10 @@ module.exports.addSigner = (user_id, signature) => {
     VALUES ($1, $2) RETURNING id`,
         [user_id, signature]
     );
+};
+
+module.exports.deleteSignature = (id) => {
+    return db.query(`DELETE FROM signatures WHERE user_id = $1`, [id]);
 };
 
 module.exports.getSigners = () => {
@@ -41,6 +41,16 @@ module.exports.getSignerByCity = (city) => {
     );
 };
 
+module.exports.getSignerToEdit = (id) => {
+    return db.query(
+        `SELECT users.first_name, users.last_name, users.email, profiles.age, profiles.city, profiles.homepage FROM users
+    LEFT OUTER JOIN profiles
+    ON users.id = profiles.user_id
+    WHERE $1 = user_id`,
+        [id]
+    );
+};
+
 module.exports.countSigners = () => {
     return db.query(`SELECT COUNT(*) FROM signatures`);
 };
@@ -54,7 +64,7 @@ function hashPassword(password) {
 module.exports.insertUser = (first, last, email, pword) => {
     return hashPassword(pword).then((hashedPassword) => {
         return db.query(
-            `INSERT INTO users(first_name, last_name, email, pword) VALUES ($1, $2, $3,$4) RETURNING id`,
+            `INSERT INTO users(first_name, last_name, email, pword) VALUES ($1, $2, $3, $4) RETURNING id`,
             [first, last, email, hashedPassword]
         );
     });
@@ -66,11 +76,16 @@ module.exports.findUser = (email) => {
 
 module.exports.addProfile = (id, age, city, url) => {
     return db.query(
-        `INSERT INTO profiles(user_id, age, city, homepage) VALUES ($1, $2, $3, $4)`,
+        `INSERT INTO profiles(user_id, age, city, homepage) VALUES ($1, $2, initcap($3), $4)`,
         [id, age || null, city, url]
     );
 };
 
-module.exports.deleteSignature = (id) => {
-    return db.query(`DELETE FROM signatures WHERE user_id = $1`, [id]);
+module.exports.updateProfile = (first, last, email, pword, id) => {
+    return db.query(
+        `INSERT INTO users (first_name, last_name, email, pword, id) VALUES ($1, $2, $3, $4, $5) RETURNING id
+    ON CONFLICT (user_id)
+    DO UPDATE SET first_name = $1, last_name = $2, email = $3, pword = $4  WHERE users.id = $5`,
+        [first, last, email, pword, id]
+    );
 };

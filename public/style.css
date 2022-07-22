@@ -4,6 +4,8 @@
 
 #container {
     background: radial-gradient(circle at right bottom, #f0cf96, #ffbcbc);
+    /* background-image: url(pexels-tom-fisk-4557916.jpg);
+    background-size: 50%; */
     display: grid;
     grid-template-rows: 0.1fr 1fr 0.1fr;
     place-items: center;
@@ -109,6 +111,4 @@
     display: grid;
     grid-template-columns: 1fr;
     width: 25vw;
-    
 }
-
