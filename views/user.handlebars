@@ -1,13 +1,16 @@
-<h1>Please {{first}} {{last}} tell us more about yourself!</h1>
-
+<section class="headtext">
+    <h1>Please {{first}} {{last}} tell us more about yourself!</h1>
+</section>
 <section id="logContainer">
-    <form id="login" method="post" min="12" max="120">
+    <form id="login" method="post">
         <input
             type="number"
             name="age"
             placeholder="Age"
             class="Input"
             id="ageInput"
+            min="12"
+            max="120"
         /><input
             type="text"
             name="City"
@@ -25,5 +28,6 @@
         <input type="submit" value="Continue" id="submit" />
     </form>
     <br />
-    <a class="link" href="/petition">If you dont want to give more Info continue here</a>
+    <a class="link" href="/petition">If you dont want to give more Info click
+        here</a>
 </section>

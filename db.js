@@ -81,11 +81,30 @@ module.exports.addProfile = (id, age, city, url) => {
     );
 };
 
-module.exports.updateProfile = (first, last, email, pword, id) => {
+module.exports.updateProfile = (id, age, city, url) => {
     return db.query(
-        `INSERT INTO users (first_name, last_name, email, pword, id) VALUES ($1, $2, $3, $4, $5) RETURNING id
+        `
+    INSERT INTO profiles(user_id, age, city, homepage) 
+    VALUES ($1, $2, $3, $4)
     ON CONFLICT (user_id)
-    DO UPDATE SET first_name = $1, last_name = $2, email = $3, pword = $4  WHERE users.id = $5`,
-        [first, last, email, pword, id]
+    DO UPDATE SET age = $2, city = $3, homepage = $4`,
+        [id, age || null, city, url]
+    );
+};
+
+module.exports.updateUserWithPassword = (id, first, last, email, password) => {
+    return hashPassword(password).then((hashedPassword) => {
+        console.log("hashed pass", hashedPassword);
+        return db.query(
+            `UPDATE users SET first_name = $2, last_name = $3, email = $4, pword = $5 WHERE id = $1`,
+            [id, first, last, email, hashedPassword]
+        );
+    });
+};
+
+module.exports.updateUserWithoutPassword = (id, first, last, email) => {
+    return db.query(
+        `UPDATE users SET first_name = $2, last_name = $3, email = $4 WHERE id = $1`,
+        [id, first, last, email]
     );
 };
