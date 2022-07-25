@@ -17,6 +17,12 @@ CREATE TABLE profiles (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 
+CREATE TABLE signatures (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL UNIQUE REFERENCES users (id),
+    signature TEXT NOT NULL CHECK (signature <> '')
+);
+
 SELECT users.first_name, users.last_name, profiles.age, profiles.city, profiles.homepage 
     FROM users
     JOIN profiles

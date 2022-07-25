@@ -1,6 +1,21 @@
 const bcrypt = require("bcryptjs/dist/bcrypt");
 const spicedPg = require("spiced-pg");
-const db = spicedPg("postgres:postgres:postgres@localhost:5432/signatures");
+
+let databaseUrl;
+if (process.env.NODE_ENV === "production") {
+    databaseUrl = process.env.DATABASE_URL;
+} else {
+    const {
+        DB_NAME,
+        DB_PW,
+        DB_HOST,
+        DB_PORT,
+        DB_BASE,
+    } = require("./secrets.json");
+    databaseUrl = `postgres:${DB_NAME}:${DB_PW}@${DB_HOST}:${DB_PORT}/${DB_BASE}`;
+}
+
+const db = spicedPg(databaseUrl);
 
 module.exports.getId = (id) => {
     return db.query(`SELECT * FROM signatures WHERE user_id = $1`, [id]);

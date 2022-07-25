@@ -1,8 +1,9 @@
 <section class="headtext">
-    <h1>A list of all sacrifices
+    <h1>Meet your fellow sacrifices
         {{#if city}}
             from
             {{city}}{{/if}}</h1>
+    <br />
 </section>
 <ol id="signers">
     {{#signers}}
@@ -19,7 +20,7 @@
                 <a href="/signers/:city">{{city}}</a>{{/if}}
         </li>
     {{/signers}}
-    <form method="post">
-        <input type="submit" value="Edit here" id="submit" />
-    </form>
 </ol>
+<form method="post">
+    <input type="submit" value="Edit here" id="submit" />
+</form>
